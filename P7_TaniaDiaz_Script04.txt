@@ -1,0 +1,10 @@
+﻿Register-ScheduledJob -Name "Backup StateSystem3" -Trigger @{Frequency = "Daily"; At = "13:16"} -ScriptBlock {
+$BackupPolicy = New-WBPolicy
+$BackupPolicy | Add-WBSystemState
+$Volumes= Get-WBVolume -CriticalVolumes
+Add-WBBackupTarget -Policy $BackupPolicy -Volume $Volumes
+$BackupDisk = New-WBBackupTarget -VolumePath 'E:'
+Add-WBBackupTarget -Policy $BackupPolicy -Target $BackupDisk
+Start-WBBackup -Policy $BackupPolicy
+}
+
